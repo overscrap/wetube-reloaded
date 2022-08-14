@@ -1,6 +1,7 @@
-export const join = (req, res) => res.send("Join");
-export const edit = (req, res) => res.send("Edit User");
-export const remove = (req, res) => res.send("Delete User");
-export const login = (req, res) => res.send("Login");
-export const logout = (req, res) => res.send("Log out");
-export const see = (req, res) => res.send("See User");
+export const join = (req, res) => res.render("join", { pageTitle: "Join" });
+export const login = (req, res) => res.render("login", { pageTitle: "Login" });
+
+export const edit = (req, res) => res.render("editUser", { pageTitle: "Edit User" });
+export const remove = (req, res) => res.render("remove", { pageTitle: "Remove" });
+export const logout = (req, res) => res.render("logout", { pageTitle: "Logout" });
+export const see = (req, res) => res.render("see", { pageTitle: "See", userId: `${req.params.id}` });
