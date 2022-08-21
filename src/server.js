@@ -1,3 +1,4 @@
+
 import express from "express";
 import path from "path";
 import morgan from "morgan";
@@ -6,8 +7,6 @@ import videoRouter from "./routers/videoRouter";
 import userRouter from "./routers/userRouter";
 import movieRouter from "./routers/movieRouter";
 import { localsMiddleware } from "./middlewares";
-
-const PORT = 4000;
 
 const app = express();
 const logger = morgan("dev");
@@ -23,6 +22,4 @@ app.use("/user", userRouter);
 app.use(localsMiddleware);
 app.use("/", movieRouter);
 
-const handleListening = () => console.log(`Server listenting on port http://localhost:${PORT} !!!`);
-
-app.listen(PORT, handleListening);
+export default app;
