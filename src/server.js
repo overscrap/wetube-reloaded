@@ -16,7 +16,6 @@ app.set("views", process.cwd() + "/src/views");
 app.set("views", path.join(__dirname, "views"));
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
-console.log(process.env.COOKIE_SECRET)
 app.use(session({
     secret: process.env.COOKIE_SECRET,
     resave: false,
@@ -30,6 +29,6 @@ app.use(session({
 app.use(localsMiddleware);
 app.use("/", rootRouter);
 app.use("/videos", videoRouter);
-app.use("/user", userRouter);
+app.use("/users", userRouter);
 
 export default app;
