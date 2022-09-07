@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, reuqired: false },
     name: { type: String, required: true },
-    loction: String,
+    location: String,
 });
 userSchema.pre("save", async function () {
     this.password = await bcrypt.hash(this.password, 5);
