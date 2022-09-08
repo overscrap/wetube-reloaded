@@ -19,9 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
     secret: process.env.COOKIE_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie:{
-        maxAge:20000,
+        maxAge: 200000,
+        rolling:true,
     },
     store: MongoStore.create({mongoUrl: process.env.DB_URL}),
 }));
