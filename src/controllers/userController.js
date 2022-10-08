@@ -214,12 +214,9 @@ export const postChangePassword = async (req, res) => {
         });
     }
     const user = await User.findById(_id);
-    console.log("Old password", user.password);
     user.password = newPassword;
-    console.log("New unhashed pw", user.password);
     await user.save();
     req.session.user.password = user.password;
-    console.log("New pw", user.password);
     //send notification
     return res.redirect("/users/logout");
 }

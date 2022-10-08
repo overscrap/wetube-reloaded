@@ -32,9 +32,17 @@ export const watch = async (req, res) => {
 export const getEdit = async (req, res) => {
     const { id } = req.params;
     const video = await Video.findById(id);
+    const { user: { _id } } = req.session;
+
     if (!video) {
         return res.render("404", { pageTitle: "Video not found" });
     }
+    console.log(String(video.owner));
+    console.log(String(_id));
+    if (String(video.owner) !== String(_id)) {
+        return res.status("403").redirect("/");
+    }
+
     return res.render("edit", { pageTitle: video.title, video });
 };
 
@@ -42,10 +50,16 @@ export const postEdit = async (req, res) => {
     const { id } = req.params;
     const { title, description, hashtags } = req.body
     const video = await Video.exists({ _id: id });
+    const { user: { _id } } = req.session;
+
     if (!video) {
         return res.render("404", { pageTitle: "Video not found" });
     }
-
+    console.log(String(video.owner));
+    console.log(String(_id));
+    if (String(video.owner) !== String(_id)) {
+        return res.status("403").redirect("/");
+    }
     await Video.findByIdAndUpdate(id, {
         title: title,
         description: description,
@@ -71,10 +85,8 @@ export const postUpload = async (req, res) => {
             owner: _id,
             hashtags: Video.formatHashtags(hashtags),
         });
-        console.log(newVideo);
         const user = await User.findById(_id);
         user.videos.push(newVideo._id);
-        console.log(user);
         user.save();
         return res.redirect("/");
     } catch (error) {
@@ -84,9 +96,26 @@ export const postUpload = async (req, res) => {
 
 export const deleteVideo = async (req, res) => {
     const { id } = req.params;
-    console.log(id);
-    await Video.findByIdAndDelete(id);
+    const { user: { _id } } = req.session;
+    const video = await Video.findById(id);
+    const user = await User.findById(_id);
+
+    if (!video) {
+        return res.status(404).render("404", { pageTitle: "Video not found" });
+    }
+
+    console.log(String(video.owner));
+    console.log(String(_id));
+
+    if (String(video.owner) !== String(_id)) {
+        return res.status("403").redirect("/");
+    }
+
     // delete video
+    await Video.findByIdAndDelete(id);
+    user.videos.splice(user.videos.indexOf(id), 1);
+    user.save();
+
     return res.redirect("/");
 };
 
